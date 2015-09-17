@@ -10,16 +10,24 @@ def filter_links(results)
   # regex for words matching "pup", "puppy", "puppies", or "dog"
   # e.g. dog_regex = ...
   ## YOUR CODE HERE
-
+  dog_regex = /\bdog|\bpupp?y?(ies)?/i
   # regex for words matching "house", "item", "boots", "walker", or "sitter"
   # e.g. item_regex = ...
   ## YOUR CODE HERE
-
+  item_regex = /house|item|boots|walker|sitter/i
   # filter results that match `dog_regex` and DO NOT match `item_regex`
   # Hint: you'll want to iterate through `results` and push each result
   # into `dogs` array if it meets the regex requirements
   ## YOUR CODE HERE
-
+  results.each do |result|
+    # puts result
+    # puts result[:title].match(dog_regex) == nil
+    if !(result[:title].match(dog_regex) == nil ) && (result[:title].match(item_regex) == nil)
+      if result[:image] == "pic" || result[:image] == "pic map"
+        dogs << result
+      end
+    end
+  end
   # return dogs array
   dogs
 end
@@ -52,7 +60,8 @@ def get_page_results(date_str)
   all_rows = page.css(".row .txt").map do |row| {
     date: row.css(".pl time").text,
     title: row.css(".pl a").text,
-    location: row.css(".l2 .pnr small").text
+    location: row.css(".l2 .pnr small").text,
+    image: row.css("span.p").text.strip!
   }
   end
 
